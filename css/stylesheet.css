@@ -1,0 +1,46 @@
+body {
+    font-family: Arial;
+    font-size: 20px;
+}
+
+div {
+    border-width: 0.3rem;
+    border-style: solid;
+    border-color: #555;
+    border-radius: 1rem;
+    background-color: #CCC;
+    padding: 1rem;
+    margin: 0.3rem;
+}
+
+.dice-rolling {
+    color: red;
+}
+
+button, .button-greenl, .button-disabled {
+    border-width: 0.3rem;
+    border-style: solid;
+    border-color: #555;
+    border-radius: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 0.3rem;
+}
+
+button {
+    background-color: #CCC;
+    user-select: none;
+}
+
+.button-green {
+    background-color: #4f4;
+}
+
+.button-disabled {
+    cursor: default;
+}
+
+.hidden {
+    display: none;
+}
