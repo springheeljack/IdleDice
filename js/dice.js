@@ -1,7 +1,7 @@
 //Classes
 class Points {
     constructor(pointsID, fadeID) {
-        this._points = 0;
+        this._points = 10000;
         this._pointsElement = document.getElementById(pointsID);
         this._fadeElement = document.getElementById(fadeID);
         this._fadeTime = 0;
@@ -79,6 +79,7 @@ class DiceManager {
 
     AddDicePointBonus(number) {
         this._dicePointBonus += number;
+        this.UpdateInformation();
     }
 
     get DicePointBonus() {
