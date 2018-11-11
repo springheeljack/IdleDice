@@ -25,15 +25,15 @@ class Points {
     }
 
     Add(number) {
-        const upgrades = upgradeManager.PurchasedUpgrades;
-        let add = 0;
-        for (let i = 0; i < upgrades.length; i++) {
-            const u = upgrades[i];
-            if (u.Type == "AddVal") {
-                add += u.Magnitude * diceManager.NumberOfDice;
-            }
+        let total = number;
+        total += diceManager.NumberOfDice * diceManager.DicePointBonus;
+        let multiplier = 1;
+        let mults = diceManager.DiceMultipliers;
+        let dice = diceManager.DiceNumbers;
+        for (let i = 0; i < mults.length; i++) {
+            multiplier *= dice[mults[i]];
         }
-        const total = number + add;
+        total *= multiplier;
         this.UpdateNumber(total);
     }
 
@@ -64,7 +64,25 @@ class DiceManager {
         this._rollTime = 5000;
         this._diceLowerBound = 1;
         this._diceUpperBound = 6;
+        this._dicePointBonus = 0;
+        this._diceMultipliers = [];
         this.UpdateInformation();
+    }
+
+    get DiceMultipliers() {
+        return this._diceMultipliers;
+    }
+
+    AddDiceMultiplier(number) {
+        this._diceMultipliers.push(number);
+    }
+
+    AddDicePointBonus(number) {
+        this._dicePointBonus += number;
+    }
+
+    get DicePointBonus() {
+        return this._dicePointBonus;
     }
 
     ChangeRollTime(multiplier) {
@@ -108,6 +126,10 @@ class DiceManager {
         this._boxElement.innerText = text;
     }
 
+    get DiceNumbers() {
+        return this._numbers;
+    }
+
     get DiceNumberTotal() {
         let total = 0;
         for (let i = 0; i < this._numberOfDice; i++) {
@@ -122,7 +144,8 @@ class DiceManager {
 
     UpdateInformation() {
         let html = "<strong>Dice owned: </strong>" + this._numberOfDice + "<br/>";
-        html += "<strong>Dice size: </strong>" + this._diceUpperBound + "<br/>";
+        html += "<strong>Dice size: </strong> D" + this._diceUpperBound + "<br/>";
+        html += "<strong>Dice point bonus: </strong>" + this._dicePointBonus + "<br/>";
         html += "<strong>Dice roll time: </strong>" + this._rollTime / 1000 + " seconds";
         this._informationElement.innerHTML = html;
     }
@@ -226,6 +249,12 @@ class Upgrade {
                 break;
             case "FasterRoll":
                 diceManager.ChangeRollTime(this._magnitude);
+                break;
+            case "DicePointBonus":
+                diceManager.AddDicePointBonus(this._magnitude);
+                break;
+            case "DiceMultiplier":
+                diceManager.AddDiceMultiplier(this._magnitude);
                 break;
             default:
         }
@@ -380,18 +409,23 @@ function Load() {
 
     //Upgrades
     upgradeManager = new UpgradeManager("Upgrades");
-    upgradeManager.Add("AddVal1", new Upgrade(50, "Get 1 more point from each dice", "AddVal", 1));
-    upgradeManager.Add("AddVal2", new Upgrade(100, "Get 2 more points from each dice", "AddVal", 2, "AddVal1"));
-    upgradeManager.Add("AddVal3", new Upgrade(150, "Get 3 more points from each dice", "AddVal", 3, "AddVal2"));
+    upgradeManager.Add("DicePointBonus1", new Upgrade(50, "Get 1 more point from each dice", "DicePointBonus", 1));
+    upgradeManager.Add("DicePointBonus2", new Upgrade(100, "Get 2 more points from each dice", "DicePointBonus", 2, "DicePointBonus1"));
+    upgradeManager.Add("DicePointBonus3", new Upgrade(150, "Get 3 more points from each dice", "DicePointBonus", 3, "DicePointBonus2"));
+    upgradeManager.Add("DicePointBonus4", new Upgrade(300, "Get 4 more points from each dice", "DicePointBonus", 4, "DicePointBonus3"));
     upgradeManager.Add("AddDice1", new Upgrade(100, "Add 1 more dice", "AddDice", 1));
     upgradeManager.Add("AddDice2", new Upgrade(200, "Add 1 more dice", "AddDice", 1, "AddDice1"));
     upgradeManager.Add("AddDice3", new Upgrade(400, "Add 1 more dice", "AddDice", 1, "AddDice2"));
+    upgradeManager.Add("AddDice4", new Upgrade(1000, "Add 1 more dice", "AddDice", 1, "AddDice3"));
     upgradeManager.Add("BiggerDice1", new Upgrade(15, "Use bigger dice", "BiggerDice", 1));
     upgradeManager.Add("BiggerDice2", new Upgrade(30, "Use bigger dice", "BiggerDice", 1, "BiggerDice1"));
     upgradeManager.Add("BiggerDice3", new Upgrade(60, "Use bigger dice", "BiggerDice", 1, "BiggerDice2"));
-    upgradeManager.Add("FasterRoll1", new Upgrade(50, "Roll 10% faster", "FasterRoll", 0.9));
-    upgradeManager.Add("FasterRoll2", new Upgrade(100, "Roll 10% faster", "FasterRoll", 0.9, "FasterRoll1"));
-    upgradeManager.Add("FasterRoll3", new Upgrade(200, "Roll 10% faster", "FasterRoll", 0.9, "FasterRoll2"));
+    upgradeManager.Add("BiggerDice4", new Upgrade(60, "Use bigger dice", "BiggerDice", 1, "BiggerDice3"));
+    upgradeManager.Add("FasterRoll1", new Upgrade(50, "Roll 20% faster", "FasterRoll", 0.8));
+    upgradeManager.Add("FasterRoll2", new Upgrade(100, "Roll 20% faster", "FasterRoll", 0.8, "FasterRoll1"));
+    upgradeManager.Add("FasterRoll3", new Upgrade(200, "Roll 20% faster", "FasterRoll", 0.8, "FasterRoll2"));
+    upgradeManager.Add("DiceMultiplier1", new Upgrade(250, "Multiply all dice points by first dice", "DiceMultiplier", 0));
+    upgradeManager.Add("DiceMultiplier2", new Upgrade(10000, "Multiply all dice points by second dice", "DiceMultiplier", 1,"DiceMultiplier1"));
     upgradeManager.CreateElements();
     upgradeManager.CheckPrerequisites();
 }
