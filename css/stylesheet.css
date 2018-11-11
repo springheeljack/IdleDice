@@ -13,8 +13,12 @@ div {
     margin: 0.3rem;
 }
 
-.dice-rolling {
-    color: red;
+.text-red {
+    color: #f22;
+}
+
+.text-green {
+    color: #2f2;
 }
 
 button, .button-greenl, .button-disabled {
@@ -34,7 +38,7 @@ button {
 }
 
 .button-green {
-    background-color: #4f4;
+    background-color: #2f2;
 }
 
 .button-disabled {

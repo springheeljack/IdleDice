@@ -18,6 +18,8 @@ class Points {
             if (this._fadeTime <= 0) {
                 this._fadeTime = 0;
                 this._fadeElement.innerText = "";
+                this._fadeElement.classList.remove("text-green");
+                this._fadeElement.classList.remove("text-red");
             }
         }
     }
@@ -44,6 +46,7 @@ class Points {
         this._fadeNumber = number;
         this._fadeTime = 1000;
         this._pointsElement.innerText = this._points;
+        this._fadeElement.classList.add(number > 0 ? "text-green" : "text-red");
     }
 
     get Get() {
@@ -71,7 +74,7 @@ class DiceManager {
 
     Roll() {
         this._currentRollTime = this._rollTime;
-        this._boxElement.classList.add("dice-rolling");
+        this._boxElement.classList.add("text-red");
     }
 
     get IsRolling() {
@@ -129,7 +132,7 @@ class DiceManager {
             this.RandomizeDice();
             this._currentRollTime -= tickSpeed;
             if (this._currentRollTime <= 0) {
-                this._boxElement.classList.remove("dice-rolling");
+                this._boxElement.classList.remove("text-red");
                 this._currentRollTime = 0;
                 points.Add(this.DiceNumberTotal);
             }
