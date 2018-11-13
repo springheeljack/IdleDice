@@ -1,6 +1,6 @@
 class Points {
     constructor(pointsID, fadeID) {
-        this._points = 0;
+        this._points = 10000;
         this._pointsElement = document.getElementById(pointsID);
         this._fadeElement = document.getElementById(fadeID);
         this._fadeTime = 0;
@@ -23,20 +23,11 @@ class Points {
         }
     }
 
-    Add(number) {
-        let total = number;
-        total += diceManager.NumberOfDice * diceManager.DicePointBonus;
-        let multiplier = 1;
-        let mults = diceManager.DiceMultipliers;
-        let dice = diceManager.DiceNumbers;
-        for (let i = 0; i < mults.length; i++) {
-            multiplier *= dice[mults[i]];
-        }
-        total *= multiplier;
-        this.UpdateNumber(total);
+    Add(number){
+        this.UpdateNumber(number);
     }
 
-    Subract(number) {
+    Subtract(number) {
         this.UpdateNumber(-number);
     }
 

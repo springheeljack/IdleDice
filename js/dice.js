@@ -102,7 +102,16 @@ class DiceManager {
             if (this._currentRollTime <= 0) {
                 this._boxElement.classList.remove("text-red");
                 this._currentRollTime = 0;
-                points.Add(this.DiceNumberTotal);
+                let total = this.DiceNumberTotal;
+                total += this._numberOfDice * this._dicePointBonus;
+                let multiplier = 1;
+                let mults = this._diceMultipliers;
+                let dice = this._numbers;
+                for (let i = 0; i < mults.length; i++) {
+                    multiplier *= dice[mults[i]];
+                }
+                total *= multiplier;
+                points.Add(total);
             }
         }
     }

@@ -38,7 +38,7 @@ class Upgrade {
 
     Purchase() {
         this._purchased = true;
-        points.Subract(this._price);
+        points.Subtract(this._price);
         switch (this._type) {
             case "AddDice":
                 diceManager.Add(this._magnitude);
@@ -54,6 +54,18 @@ class Upgrade {
                 break;
             case "DiceMultiplier":
                 diceManager.AddDiceMultiplier(this._magnitude);
+                break;
+            case "UnlockCoinflippers":
+                coinflipperManager.Reveal();
+                break;
+            case "FasterFlips":
+                coinflipperManager.AddFlipTimeMultiplier(this._magnitude);
+                break;
+            case "SideChance":
+                coinflipperManager.AddSideChanceMultiplier(this._magnitude);
+                break;
+            case "SidePointMultiplier":
+                coinflipperManager.AddSidePointMultiplier(this._magnitude);
                 break;
             default:
         }
